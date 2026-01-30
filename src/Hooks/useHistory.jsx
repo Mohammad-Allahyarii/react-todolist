@@ -1,8 +1,8 @@
 import { HISTORY_ACTIONS } from "@/data/constants";
-import { act, useEffect } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const useHistory = (tasks, setTasks) => {
+
   const [previous, setPrevious] = useState([]);
   const [next, setNext] = useState([]);
 
@@ -12,6 +12,7 @@ const useHistory = (tasks, setTasks) => {
   }, [previous, next]);
 
   const undo = () => {
+
     const toDoHistoryTask = previous[previous.length - 1];
 
     if (toDoHistoryTask.actionToPrev === HISTORY_ACTIONS.ADD_TASK) {
@@ -25,12 +26,9 @@ const useHistory = (tasks, setTasks) => {
 
       setTasks((prevTasks) =>
         prevTasks.map((task) =>
-          task.id === toDoHistoryTask.id ? { ...task, task: toDoHistoryTask.task, actionToNext: HISTORY_ACTIONS.EDIT_TASK } : task,
+          task.id === toDoHistoryTask.id ? { ...task, task: toDoHistoryTask.prevTitle, actionToNext: HISTORY_ACTIONS.EDIT_TASK } : task,
         ),
       );
-
-      // console.log('[back edit task] - ', toDoHistoryTask);
-      
 
     }
 
@@ -49,12 +47,14 @@ const useHistory = (tasks, setTasks) => {
     if (toDoHistoryTask.actionToNext === HISTORY_ACTIONS.ADD_TASK) {
       setTasks((prev) => [...prev, {...toDoHistoryTask}]);
     } else if (toDoHistoryTask.actionToNext === HISTORY_ACTIONS.DELETE_TASK) {
+
       setTasks((prev) => prev.filter((task) => task.id != toDoHistoryTask.id));
+
     } else if (toDoHistoryTask.actionToNext === HISTORY_ACTIONS.EDIT_TASK) {
 
       setTasks((prevTasks) =>
         prevTasks.map((task) =>
-          task.id === toDoHistoryTask.id ? { ...task, task: toDoHistoryTask.newTitle } : task,
+          task.id === toDoHistoryTask.id ? { ...task, task: toDoHistoryTask.nextTitle, actionToPrev: HISTORY_ACTIONS.EDIT_TASK } : task,
         ),
       );
 
@@ -74,17 +74,19 @@ const useHistory = (tasks, setTasks) => {
         { ...task, actionToPrev: HISTORY_ACTIONS.ADD_TASK },
       ]);
     } else if (action === HISTORY_ACTIONS.EDIT_TASK) {
+      
       setPrevious((prev) => [
         ...prev,
         {
           ...task,
           actionToPrev: HISTORY_ACTIONS.EDIT_TASK,
-          newTitle: payload.newTitle,
+          nextTitle: payload.newTitle,
+          prevTitle: task.task,
         },
       ]);
     }
 
-    setNext([])
+    setNext([]);
   };
 
   return {
