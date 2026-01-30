@@ -26,6 +26,7 @@ This project represents my learning path in frontend development — not just th
 - Low and subtle animations
 - Data persistence using Local Storage
 - Undo / Redo functionality (custom implementation)
+- Filter todos
 
 > ⚠️ Note:  
 > The undo/redo system in this project is implemented using my **earlier approach**.  
