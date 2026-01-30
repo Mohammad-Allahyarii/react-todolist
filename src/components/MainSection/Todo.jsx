@@ -95,7 +95,7 @@ const Todo = ({ id, task, isImportant, isCompleted }) => {
                 <MinusSquare size="24" className="text-my-dark" />
               )}
             </button>
-            <h3 className={isCompleted ? "line-through opacity-50" : ""}>
+            <h3 className={isCompleted ? "line-through opacity-50" : null}>
               {task}
             </h3>
           </div>
@@ -106,13 +106,13 @@ const Todo = ({ id, task, isImportant, isCompleted }) => {
               e.preventDefault();
               editTaskHandler();
             }}
-            className={`bg-green-600! shadow-green-400/30! text-sm`}
+            className={`bg-green-600! shadow-green-400/30! text-[12px] sm:text-sm `}
           >
             {isEditing ? "Done" : "Edit"}
           </Btn>
           <Btn
             onClickHandler={() => setIsDeleting(true)}
-            className={`bg-red-600! shadow-red-600/30! text-sm`}
+            className={`bg-red-600! shadow-red-600/30! text-[12px] sm:text-sm`}
           >
             Delete
           </Btn>

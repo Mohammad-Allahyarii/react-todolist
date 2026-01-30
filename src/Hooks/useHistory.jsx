@@ -5,10 +5,7 @@ const useHistory = (tasks, setTasks) => {
   const [previous, setPrevious] = useState([]);
   const [next, setNext] = useState([]);
 
-  useEffect(() => {
-    console.log("previous", previous);
-    console.log("next", next);
-  }, [previous, next]);
+
 
 
   const applyChange = (entry, mode) => {
@@ -35,8 +32,6 @@ const useHistory = (tasks, setTasks) => {
         setTasks(prev => prev.filter(task => task.id != entry.targetId));
       } else {
         setTasks(prev => [...prev, data])
-        console.log('undo delete');
-        
       }
 
       return;
