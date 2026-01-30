@@ -1,16 +1,56 @@
-# React + Vite
+# 📝 React Todo List App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A **practice / learning project** built with React and Vite, focused on writing clean logic, managing state properly, and gradually improving architectural thinking.
 
-Currently, two official plugins are available:
+This project represents my learning path in frontend development — not just the final result.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Live Demo
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+👉 **[View Live Project](https://react-todolist-ten-delta.vercel.app/)**
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+![Todo App Screenshot](./screenshots/1.png)
+![Todo App Screenshot](./screenshots/2.png)
+
+
+
+---
+## ✨ Features
+
+- Add, edit, and delete todos
+- Mark todos as completed
+- Dark mode support
+- Low and subtle animations
+- Data persistence using Local Storage
+- Undo / Redo functionality (custom implementation)
+
+> ⚠️ Note:  
+> The undo/redo system in this project is implemented using my **earlier approach**.  
+> A more advanced and engineering-oriented undo/redo design was explored separately and will be used in future projects.
+
+---
+
+## 🛠 Tech Stack
+
+- **React 19**
+- **Vite**
+- **JavaScript (ES6+)**
+- **Tailwind CSS v4**
+- **Local Storage**
+- **Iconsax React Icons**
+
+---
+
+## 📦 Dependencies
+
+```json
+{
+  "@tailwindcss/vite": "^4.1.18",
+  "iconsax-reactjs": "^0.0.8",
+  "react": "^19.2.0",
+  "react-dom": "^19.2.0",
+  "tailwindcss": "^4.1.18"
+}
