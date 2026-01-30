@@ -106,13 +106,13 @@ const Todo = ({ id, task, isImportant, isCompleted }) => {
               e.preventDefault();
               editTaskHandler();
             }}
-            className={`bg-green-600! shadow-green-400/30! text-[12px] sm:text-sm `}
+            className={`bg-green-600! shadow-green-400/30! text-[12px] sm:text-sm ${isCompleted ? "opacity-60" : ""}`}
           >
             {isEditing ? "Done" : "Edit"}
           </Btn>
           <Btn
             onClickHandler={() => setIsDeleting(true)}
-            className={`bg-red-600! shadow-red-600/30! text-[12px] sm:text-sm`}
+            className={`bg-red-600! shadow-red-600/30! text-[12px] sm:text-sm ${isCompleted ? "opacity-60" : ""}`}
           >
             Delete
           </Btn>
