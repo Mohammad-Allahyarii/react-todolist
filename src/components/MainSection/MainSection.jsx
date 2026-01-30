@@ -4,8 +4,8 @@ import Todo from "./Todo";
 import EmptyTasksList from "./EmptyTasksList";
 
 const MainSection = () => {
-  const { filteredTasks } = useTasks();
   
+  const { filteredTasks } = useTasks();
 
   return (
     <main className="">

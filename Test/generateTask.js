@@ -2,7 +2,7 @@
 export  const generateTask = () => {
   const tasks = [];
   let task;
-  for (let i = 0; i <= 1000; i++) {
+  for (let i = 0; i <= 5; i++) {
 
     task = {
       id: crypto.randomUUID(),

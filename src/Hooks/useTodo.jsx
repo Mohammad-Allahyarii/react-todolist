@@ -9,7 +9,7 @@ const useTodo = () => {
   const [filter, setFilter] = useState(FILTERS.ALL);
   const [editingId, setEditingId] = useState(null);
 
-  const { undo, redo, canRedo, canUndo, addToPreviousHandler } = useHistory(
+  const { undo, redo, canRedo, canUndo, pushHistory } = useHistory(
     tasks,
     setTasks,
   );
@@ -18,14 +18,16 @@ const useTodo = () => {
   const stopEditing = () => setEditingId(null);
 
   const addTask = (task, isImportant) => {
+
     const newTask = {
       id: crypto.randomUUID(),
+      order: tasks.length + 1,
       task,
       isImportant,
       isCompleted: false,
     };
 
-    addToPreviousHandler({"action": HISTORY_ACTIONS.ADD_TASK, "task": newTask})
+    pushHistory({type: HISTORY_ACTIONS.ADD_TASK, targetId: newTask.id, before: null, after: {...newTask}})
 
     setTasks((prevTasks) => [...prevTasks, newTask]);
   };
@@ -34,9 +36,9 @@ const useTodo = () => {
 
     const mainTask = tasks.find(task => task.id == id)
 
-    addToPreviousHandler({"action": HISTORY_ACTIONS.EDIT_TASK, "task": mainTask, "payload": { newTitle: newTask } })
+    pushHistory({type: HISTORY_ACTIONS.EDIT_TASK, targetId: id, before: {...mainTask}, after: {...mainTask, task: newTask}})
 
-    
+
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
         task.id === id ? { ...task, task: newTask } : task,
@@ -44,26 +46,41 @@ const useTodo = () => {
     );
 
 
+
   };
 
   const filteredTasks = (() => {
+
+    let result = null;
+
     switch (filter) {
       case FILTERS.ALL:
-        return tasks;
+        result = tasks;
+        break;
       case FILTERS.IMPORTANT:
-        return tasks.filter((task) => task.isImportant);
+        result = tasks.filter((task) => task.isImportant);
+        break;
       case FILTERS.COMPLETED:
-        return tasks.filter((task) => task.isCompleted);
+        result = tasks.filter((task) => task.isCompleted);
+        break;
       case FILTERS.INCOMPLETE:
-        return tasks.filter((task) => !task.isCompleted);
-    }
+        result = tasks.filter((task) => !task.isCompleted);
+        break;
+      default: 
+        result = tasks;
+      
+        
+      }
+      
+      return [...result].sort((a, b) => a.order - b.order);
+      // return result;
+
   })();
 
   const deleteTask = (id) => {
    
+    pushHistory({type: HISTORY_ACTIONS.DELETE_TASK, targetId: id, before: {...tasks.find(t => t.id == id)}, after: null})
     setTasks((prevTasks) => prevTasks.filter((task) => !(task.id === id)));
-
-    addToPreviousHandler( {action: HISTORY_ACTIONS.DELETE_TASK, task: tasks.find(task => task.id === id)} );
 
   };
 
