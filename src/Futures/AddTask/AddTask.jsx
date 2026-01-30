@@ -51,7 +51,7 @@ const AddTask = () => {
   } ,[])
 
   return (
-    <form action={formAction} className="flex justify-between items-center">
+    <form action={formAction} className="flex justify-between items-center" autoComplete="off">
       <input
       ref={inputRef}
         name="task"
