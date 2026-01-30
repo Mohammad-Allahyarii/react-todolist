@@ -11,8 +11,8 @@ const Header = () => {
   return (
     <header className="my-4 ">
       <Box className="flex justify-between items-center px-4">
-        <h1>{APP_TITLE}</h1>
-        <div className="flex gap-4 items-center">
+        <h1 className="sm:text-md text-sm">{APP_TITLE}</h1>
+        <div className="flex gap-2 sm:gap-4 items-center">
           <ChangeMainColor />
           <ToggleTheme />
         </div>

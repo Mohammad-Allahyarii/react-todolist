@@ -27,12 +27,12 @@ This project represents my learning path in frontend development — not just th
 - Data persistence using Local Storage
 - Undo / Redo functionality (custom implementation)
 - Filter todos
+- Choose custom color
+- Responsive
 
-> ⚠️ Note:  
-> The undo/redo system in this project is implemented using my **earlier approach**.  
-> A more advanced and engineering-oriented undo/redo design was explored separately and will be used in future projects.
 
 ---
+
 
 ## 🛠 Tech Stack
 
