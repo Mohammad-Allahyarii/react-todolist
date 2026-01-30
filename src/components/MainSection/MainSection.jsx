@@ -9,7 +9,7 @@ const MainSection = () => {
 
   return (
     <main className="">
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-6 mb-20">
 
         {filteredTasks.length > 0 ? filteredTasks.map((task) => (
           <Todo key={task.id} {...task} />

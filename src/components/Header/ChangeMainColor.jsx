@@ -21,7 +21,7 @@ const changeMainColorHandler = (e) => {
     <>
       <label
         htmlFor="theme-color"
-        className="flex gap-2 flex-row-reverse items-center cursor-pointer border p-1 rounded-md hover:bg-my-dark/10 transition"
+        className="flex gap-2 flex-row-reverse items-center cursor-pointer border p-1 rounded-[8px] hover:bg-my-dark/10 transition"
       >
         <span className="bg-primary block min-h-4 min-w-4 rounded-full"></span>
         <span className="text-sm">Change main color!</span>

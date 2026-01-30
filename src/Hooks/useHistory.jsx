@@ -1,5 +1,5 @@
 import { HISTORY_ACTIONS } from "@/data/constants";
-import { useEffect } from "react";
+import { act, useEffect } from "react";
 import { useState } from "react";
 
 const useHistory = (tasks, setTasks) => {
@@ -7,94 +7,90 @@ const useHistory = (tasks, setTasks) => {
   const [next, setNext] = useState([]);
 
   useEffect(() => {
-    console.log("previous: ", previous);
-    console.log("next: ", next);
+    console.log("previous", previous);
+    console.log("next", next);
   }, [previous, next]);
 
   const undo = () => {
-    if (previous.length === 0) return null;
-    const state = previous[previous.length - 1];
+    const toDoHistoryTask = previous[previous.length - 1];
 
+    if (toDoHistoryTask.actionToPrev === HISTORY_ACTIONS.ADD_TASK) {
+      setTasks((prev) => [...prev, toDoHistoryTask]);
+      toDoHistoryTask.actionToNext = HISTORY_ACTIONS.DELETE_TASK;
+    } else if (toDoHistoryTask.actionToPrev === HISTORY_ACTIONS.DELETE_TASK) {
+      setTasks((prev) => prev.filter((task) => task.id != toDoHistoryTask.id));
+      toDoHistoryTask.actionToNext = HISTORY_ACTIONS.ADD_TASK;
 
-    setPrevious(prev => prev.slice(0, prev.length - 2));
-    // next.unshift(state);
-    setNext((prev) => [state, ...prev]);
+    } else if (toDoHistoryTask.actionToPrev === HISTORY_ACTIONS.EDIT_TASK) {
 
-    doAction(state);
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === toDoHistoryTask.id ? { ...task, task: toDoHistoryTask.task, actionToNext: HISTORY_ACTIONS.EDIT_TASK } : task,
+        ),
+      );
+
+      // console.log('[back edit task] - ', toDoHistoryTask);
+      
+
+    }
+
+    setPrevious((prev) => prev.slice(0, prev.length - 1));
+    setNext((prev) => [toDoHistoryTask, ...prev]);
+
   };
 
   const redo = () => {
-    if (next.length === 0) return;
-    const state = next[0];
-    // previous.push(state);
-    setPrevious((prev) => [...prev, state]);
 
+    const toDoHistoryTask = next[0];
+
+    setPrevious((prev) => [...prev, toDoHistoryTask]);
     setNext((prev) => prev.slice(1));
-    doAction(state, true);
-  };
 
-  const doAction = (state, isRedo = false) => {
+    if (toDoHistoryTask.actionToNext === HISTORY_ACTIONS.ADD_TASK) {
+      setTasks((prev) => [...prev, {...toDoHistoryTask}]);
+    } else if (toDoHistoryTask.actionToNext === HISTORY_ACTIONS.DELETE_TASK) {
+      setTasks((prev) => prev.filter((task) => task.id != toDoHistoryTask.id));
+    } else if (toDoHistoryTask.actionToNext === HISTORY_ACTIONS.EDIT_TASK) {
 
-    if (state.action === HISTORY_ACTIONS.ADD_TASK) {
-      console.log(`[useHistory.jsx] - addTask, task:${state}`);
-
-      setTasks((prevTasks) => [
-        ...prevTasks,
-        { ...state, action: HISTORY_ACTIONS.DELETE_TASK },
-      ]);
-
-      if (!isRedo) {
-        submitAction({
-          action: HISTORY_ACTIONS.DELETE_TASK,
-          payload: { ...state, action: HISTORY_ACTIONS.DELETE_TASK },
-        });
-      }
-
-    } else if (state.action === HISTORY_ACTIONS.DELETE_TASK) {
-      console.log(`[useHistory.jsx] - deleteTask, task:${state}`);
-
-      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== state.id));
-
-      if (!isRedo){
-
-        submitAction({
-          action: HISTORY_ACTIONS.ADD_TASK,
-          payload: { ...state, action: HISTORY_ACTIONS.ADD_TASK },
-        });
-      }
-    } else if (state.action === HISTORY_ACTIONS.EDIT_TASK) {
-      console.log(`[useHistory.jsx] - editTask, task:${state}`);
       setTasks((prevTasks) =>
         prevTasks.map((task) =>
-          task.id === state.id ? { ...task, task: state.newTask } : task,
+          task.id === toDoHistoryTask.id ? { ...task, task: toDoHistoryTask.newTitle } : task,
         ),
       );
+
     }
   };
 
-  const submitAction = ({ action, payload }) => {
+  const addToPreviousHandler = ({ action, task, payload = null }) => {
+
     if (action === HISTORY_ACTIONS.ADD_TASK) {
       setPrevious((prev) => [
         ...prev,
-        { ...payload, action: HISTORY_ACTIONS.DELETE_TASK },
+        { ...task, actionToPrev: HISTORY_ACTIONS.DELETE_TASK },
       ]);
     } else if (action === HISTORY_ACTIONS.DELETE_TASK) {
       setPrevious((prev) => [
         ...prev,
-        { ...payload, action: HISTORY_ACTIONS.ADD_TASK },
+        { ...task, actionToPrev: HISTORY_ACTIONS.ADD_TASK },
       ]);
     } else if (action === HISTORY_ACTIONS.EDIT_TASK) {
       setPrevious((prev) => [
         ...prev,
-        { ...payload, action: HISTORY_ACTIONS.EDIT_TASK },
+        {
+          ...task,
+          actionToPrev: HISTORY_ACTIONS.EDIT_TASK,
+          newTitle: payload.newTitle,
+        },
       ]);
     }
+
+    setNext([])
   };
 
   return {
     undo,
     redo,
-    submitAction,
+    addToPreviousHandler,
     canRedo: next.length > 0,
     canUndo: previous.length > 0,
   };

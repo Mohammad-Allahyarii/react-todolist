@@ -7,24 +7,16 @@ const EmptyTasksList = () => {
   const intervalRef = useRef();
 
   useEffect(() => {
+    typeWriteEffect();
 
-typeWriteEffect()
-
-    return () => clearInterval(intervalRef.current)
+    return () => clearInterval(intervalRef.current);
   }, []);
 
   const typeWriteEffect = () => {
-
     intervalRef.current = setInterval(() => {
-      
-
-      setDotCount((prev) => (
-        prev >= 3 ? 0 : prev + 1
-      ));
+      setDotCount((prev) => (prev >= 3 ? 0 : prev + 1));
     }, 1000);
-
-  }
-
+  };
 
   return (
     <h2 className="text-center text-my-dark flex justify-center items-center gap-2">
@@ -32,9 +24,13 @@ typeWriteEffect()
       <span>
         Empty
         <span>
-          {Array.from({ length: dotCount })
+          {/* {Array.from({ length: dotCount })
             .map((_) => ".")
-            .join("")}
+            .join("")} */}
+
+            {
+              '.'.repeat(dotCount)
+            }
         </span>
       </span>
     </h2>

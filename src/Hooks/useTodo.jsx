@@ -9,7 +9,7 @@ const useTodo = () => {
   const [filter, setFilter] = useState(FILTERS.ALL);
   const [editingId, setEditingId] = useState(null);
 
-  const { undo, redo, canRedo, canUndo, submitAction } = useHistory(
+  const { undo, redo, canRedo, canUndo, addToPreviousHandler } = useHistory(
     tasks,
     setTasks,
   );
@@ -25,25 +25,25 @@ const useTodo = () => {
       isCompleted: false,
     };
 
-    submitAction({ action: HISTORY_ACTIONS.ADD_TASK, payload: newTask });
+    addToPreviousHandler({"action": HISTORY_ACTIONS.ADD_TASK, "task": newTask})
 
     setTasks((prevTasks) => [...prevTasks, newTask]);
   };
 
   const editTask = (id, newTask) => {
-    submitAction({
-      action: HISTORY_ACTIONS.EDIT_TASK,
-      payload: {
-        id,
-        previousTask: tasks.find((task) => task.id === id).task,
-        newTask,
-      },
-    });
+
+    const mainTask = tasks.find(task => task.id == id)
+
+    addToPreviousHandler({"action": HISTORY_ACTIONS.EDIT_TASK, "task": mainTask, "payload": { newTitle: newTask } })
+
+    
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
         task.id === id ? { ...task, task: newTask } : task,
       ),
     );
+
+
   };
 
   const filteredTasks = (() => {
@@ -60,11 +60,11 @@ const useTodo = () => {
   })();
 
   const deleteTask = (id) => {
-    submitAction({
-      action: HISTORY_ACTIONS.DELETE_TASK,
-      payload: tasks.find((task) => task.id === id),
-    });
+   
     setTasks((prevTasks) => prevTasks.filter((task) => !(task.id === id)));
+
+    addToPreviousHandler( {action: HISTORY_ACTIONS.DELETE_TASK, task: tasks.find(task => task.id === id)} );
+
   };
 
   const toggleCompleted = (id) => {
