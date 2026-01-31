@@ -3,6 +3,7 @@ import Box from "../ui/Box";
 import Btn from "../ui/Btn";
 import { useTasks } from "@/Hooks/useTasks";
 import { MinusSquare, TickSquare } from "iconsax-reactjs";
+import ImportantSpan from "./ImportantSpan";
 
 const Todo = ({ id, task, isImportant, isCompleted }) => {
   const {
@@ -21,16 +22,13 @@ const Todo = ({ id, task, isImportant, isCompleted }) => {
   const [deleted, setDeleted] = useState(false);
 
   useEffect(() => {
-
     if (!deleted) return;
 
-      const timer = setTimeout(() => {
-        deleteTask(id);
-      }, 300);
-
+    const timer = setTimeout(() => {
+      deleteTask(id);
+    }, 300);
 
     () => clearTimeout(timer);
-
   }, [deleted]);
 
   const editTaskHandler = () => {
@@ -38,13 +36,12 @@ const Todo = ({ id, task, isImportant, isCompleted }) => {
       editTask(id, editVal);
       stopEditing();
       return;
-    } else if (!isEditing){
+    } else if (!isEditing) {
       startEditing(id);
       return;
-    } 
+    }
 
-    alert('task can\'t be empty')
-    
+    alert("task can't be empty");
   };
 
   const deleteTaskHandler = () => {
@@ -54,19 +51,19 @@ const Todo = ({ id, task, isImportant, isCompleted }) => {
   return (
     <Box
       className={`
-        ${
-          isCompleted && "border-primary/80 hover:border-primary"
-        }
+        ${isCompleted ? "border-primary/80 hover:border-primary" : ""}
 
         ${
-        isEditing &&
-        "shadow-[0_0_50px_5px] shadow-green-600/10! border-green-600!"
-      } 
-      ${deleted && "opacity-0 transition-all duration-300"}
+          isEditing
+            ? "shadow-[0_0_50px_5px] shadow-green-600/10! border-green-600!"
+            : ""
+        } 
+      ${deleted ? "opacity-0 transition-all duration-300" : ""} 
 
       ${
-        isDeleting &&
-        "overflow-hidden shadow-[0_0_20px_10px] shadow-red-600/20! border-red-600! "
+        isDeleting
+          ? "overflow-hidden shadow-[0_0_20px_10px] shadow-red-600/20! border-red-600! "
+          : ""
       }
       
         `}
@@ -80,7 +77,9 @@ const Todo = ({ id, task, isImportant, isCompleted }) => {
             type="text"
             value={editVal}
             onChange={(e) => setEditVal(e.target.value)}
-            onKeyUp={(event) => event.key === 'Enter' ? editTaskHandler() : null}
+            onKeyUp={(event) =>
+              event.key === "Enter" ? editTaskHandler() : null
+            }
           />
         )}
         {!isEditing && (
@@ -106,13 +105,13 @@ const Todo = ({ id, task, isImportant, isCompleted }) => {
               e.preventDefault();
               editTaskHandler();
             }}
-            className={`bg-green-600! shadow-green-400/30! text-[12px] sm:text-sm ${isCompleted ? "opacity-60" : ""}`}
+            className={`bg-green-600! shadow-green-400/30! text-[12px] sm:text-sm ${isCompleted ? "opacity-60" : null}`}
           >
             {isEditing ? "Done" : "Edit"}
           </Btn>
           <Btn
             onClickHandler={() => setIsDeleting(true)}
-            className={`bg-red-600! shadow-red-600/30! text-[12px] sm:text-sm ${isCompleted ? "opacity-60" : ""}`}
+            className={`bg-red-600! shadow-red-600/30! text-[12px] sm:text-sm ${isCompleted ? "opacity-60" : null}`}
           >
             Delete
           </Btn>
@@ -144,11 +143,7 @@ const Todo = ({ id, task, isImportant, isCompleted }) => {
         </div>
       </div>
 
-      {isImportant && !isDeleting && !isEditing && (
-        <span className="fixed left-[50%] bottom-[-16px] rounded-[7px] text-yellow-400 text-sm  bg-my-light py-1 px-2 translate-x-[-50%] ">
-          important
-        </span>
-      )}
+      {isImportant && !isDeleting && !isEditing && <ImportantSpan />}
     </Box>
   );
 };

@@ -85,6 +85,11 @@ const useTodo = () => {
   };
 
   const toggleCompleted = (id) => {
+
+    const mainTask = tasks.find(task => task.id == id)
+    pushHistory({type: HISTORY_ACTIONS.EDIT_TASK, targetId: id, before: {...mainTask}, after: {...mainTask, isCompleted: !mainTask.isCompleted}})
+
+
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
         task.id === id ? { ...task, isCompleted: !task.isCompleted } : task,
