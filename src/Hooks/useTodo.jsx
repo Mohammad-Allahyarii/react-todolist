@@ -34,7 +34,9 @@ const useTodo = () => {
 
   const editTask = (id, newTask) => {
 
-    const mainTask = tasks.find(task => task.id == id)
+    const mainTask = tasks.find(task => task.id == id);
+
+    if ( mainTask.task == newTask.trim() ) return;
 
     pushHistory({type: HISTORY_ACTIONS.EDIT_TASK, targetId: id, before: {...mainTask}, after: {...mainTask, task: newTask}})
 

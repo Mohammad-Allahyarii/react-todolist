@@ -21,6 +21,7 @@ const Todo = ({ id, task, isImportant, isCompleted }) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [deleted, setDeleted] = useState(false);
 
+
   useEffect(() => {
     if (!deleted) return;
 
@@ -50,7 +51,8 @@ const Todo = ({ id, task, isImportant, isCompleted }) => {
 
   return (
     <Box
-      className={`
+      className={` 
+        
         ${isCompleted ? "border-primary/80 hover:border-primary" : ""}
 
         ${
